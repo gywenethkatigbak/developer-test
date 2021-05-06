@@ -6996,3 +6996,23 @@ hr {
 
 .store-availability-list__phone {
   margin-bottom: 0; }
+/* Collection - Button Styles */
+.collection-btn{
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 8px 15px;
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+  font-family: var(--font-stack-header);
+  font-style: var(--font-style-header);
+  font-weight: var(--font-weight-header);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: normal;
+}
+.collection-option{
+  width: 100%;
+  margin-bottom: 10px;
+}

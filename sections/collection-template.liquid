@@ -141,7 +141,39 @@
         {% for product in collection.products %}
           <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
             {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
-          </li>
+              {% if section.settings.addtocart_enable %}
+                {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+                  <form action="/cart/add" method="post">
+                    <input type="hidden" name="id" value="{{ product.variants.first.id }}" />  
+                      {% if section.settings.variants_enable %}
+                        {% if product.variants.size == 1 %}
+                        <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+                        {% else %}
+                        <select class="collection-option" name="id">{% for variant in product.variants %}<option value="{{ variant.id }}">{{ variant.title }}</option>{% endfor %}</select>
+                        {% endif %}
+                      {% endif %}
+                    <div><button type="submit" class="collection-btn" name="add" >Add to cart</button></div> 
+                  </form>
+                {% endif %}
+                
+              {% elsif section.settings.buynow_enable %}
+                {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+                    <form action="/cart/add" method="post">
+                      <input type="hidden" name="id" value="{{ product.variants.first.id }}" />  
+                        {% if section.settings.variants_enable %}
+                          {% if product.variants.size == 1 %}
+                          <input type="hidden" name="id" value="{{ product.variants.first.id }}" />
+                          {% else %}
+                          <select class="collection-option" name="id">{% for variant in product.variants %}<option value="{{ variant.id }}">{{ variant.title }}</option>{% endfor %}</select>
+                          {% endif %}
+                        {% endif %}
+                      <div><button type="submit" class="collection-btn" name="add">Buy Now</button></div> 
+                      <input type="hidden" name="return_to" value="/checkout/" /> 
+                    </form>
+                  {% endif %}
+              {% endif %} 
+          </li>  
+
         {% else %}
           {% comment %}
           Add default products to help with onboarding for collections/all only.
@@ -516,6 +548,24 @@
         "zh-TW": "啟用標籤篩選功能"
       },
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "buynow_enable",
+      "label": "Enable buy now button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "addtocart_enable",
+      "label": "Enable Add to cart button",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "variants_enable",
+      "label": "Add product variants",
+      "default": false
     }
   ]
 }
